@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YuLaoshi - Belajar Bahasa Mandarin dengan Pinyin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/templatemo-topic-listing.css') }}" rel="stylesheet">
+    <style>
+        /* Basic styling for the badge */
+        .badge-display {
+            background-color: #28a745; /* Green for motivation */
+            color: white;
+            padding: 0.3em 0.6em;
+            border-radius: 0.25rem;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+            white-space: nowrap; /* Prevent text from wrapping */
+            vertical-align: middle;
+            display: inline-flex;
+            align-items: center;
+        }
+        .badge-display.beginner { background-color: #007bff; } /* Blue */
+        .badge-display.intermediate { background-color: #ffc107; color: #333; } /* Yellow */
+        .badge-display.advanced { background-color: #dc3545; } /* Red */
+        .badge-display.master { background-color: #6f42c1; } /* Purple */
+        /* Overlay for username input */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1050; /* Above Bootstrap modals */
+        }
+        .username-prompt {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+        }
+        .username-prompt input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .username-prompt button {
+            padding: 10px 30px;
+            background-color: #2a4365;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .username-prompt button:hover {
+            background-color: #4a6da7;
+        }
+    </style>
+</head>
+<body>
+    <div id="usernameOverlay" class="overlay">
+        <div class="username-prompt">
+            <h3>Selamat Datang ke YuLaoshi!</h3>
+            <p>Sila masukkan nama anda untuk bermula:</p>
+            <input type="text" id="usernameInput" placeholder="Nama Anda" maxlength="20">
+            <button id="startButton">Mula Belajar</button>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-translate"></i>
+                <span>YuLaoshi</span>
+            </a>
+            <div class="ms-auto me-3 d-flex align-items-center d-lg-none">
+                <span class="text-white me-2 fw-bold">Mata Anda: <span id="currentPointsMobile">0</span></span>
+                <span id="currentBadgeMobile" class="badge-display"></span>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon text-white"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    </ul>
+                <div class="d-none d-lg-flex ms-3 align-items-center">
+                    <span class="text-white fw-bold">Mata Anda: <span id="currentPointsDesktop">0</span></span>
+                    <span id="currentBadgeDesktop" class="badge-display"></span>
+                    <span id="displayNameDesktop" class="text-white ms-3 fw-bold"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section d-flex justify-content-center align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 mx-auto">
+                    <h1 class="text-white text-center">Belajar Bahasa Mandarin Dengan YuLaoshi</h1>
+                    <h6 class="text-center">Tutor AI peribadi anda untuk belajar Mandarin (TMC501). Berlatih perbualan, sebutan, dan banyak lagi!</h6>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-5 mb-4 mb-lg-0">
+                <div class="suggestion-card">
+                    <h5>JAWAPAN POTENSI</h5>
+                    <div class="suggestion-list" id="suggestionList">
+                        <div class="suggestion-item">
+                            <div class="pinyin-block">Memuatkan cadangan...</div>
+                        </div>
+                    </div>
+                    <!-- Clear History Button was here, now removed -->
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-7">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <i class="bi bi-robot me-2"></i>Sembang YuLaoshi
+                    </div>
+                    <div class="chat-body" id="chatBody">
+                        <div class="chat-message bot-message">
+                            <div class="d-flex align-items-center">
+                                <strong>YuLaoshi</strong>
+                                <span class="language-tag">Tutor AI</span>
+                            </div>
+                            <div class="message-content mt-2">
+                                <div class="pinyin-phrase">Nǐ hǎo!</div>
+                                <div class="phrase-translation">Helo!</div>
+                                Saya Yu Laoshi, tutor Mandarin anda. Apa yang anda ingin praktik hari ini? Kami boleh praktik perbualan, sebutan, atau belajar kosa kata baru.
+                            </div>
+                            <div class="message-time">Baru sahaja</div>
+                        </div>
+
+                        <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                            <span>YuLaoshi sedang menaip</span>
+                            <div class="d-flex ms-2">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="Tulis mesej anda..." autocomplete="off">
+                        <button type="button" id="sendButton">
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center my-5">
+            <a href="{{ url_for('quiz') }}" class="colorful-btn">🎯 Mula Kuiz Sekarang</a>
+        </div>
+    </div>
+
+    <footer class="site-footer section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-12 mb-4 pb-2">
+                    <a class="navbar-brand mb-2">
+                        <i class="bi bi-translate"></i>
+                        <span>YuLaoshi</span>
+                    </a>
+                    <p class="text-white-50 mt-3">Tutor AI Mandarin peribadi anda untuk pembelajaran berkesan.</p>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6">
+                    <h6 class="site-footer-title mb-3">Sumber</h6>
+                    <ul class="site-footer-links">
+                        <li class="site-footer-link-item">
+                            <a href="https://github.com/izwanGit" class="site-footer-link">GitHub</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6 mb-4 mb-lg-0">
+                    <h6 class="site-footer-title mb-3">Maklumat</h6>
+                    <p class="text-white d-flex mb-1">
+                        <a class="site-footer-link">
+                            MUHAMMAD IZWAN BIN AHMAD
+                        </a>
+                    </p>
+                    <p class="text-white d-flex mb-1">
+                        <a class="site-footer-link">
+                            2024938885
+                        </a>
+                    </p>
+                    <p class="text-white d-flex mb-1">
+                        <a class="site-footer-link">
+                            A4CDCS2305A
+                        </a>
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-12 mt-4 mt-lg-0 ms-auto">
+                    <p class="copyright-text mt-lg-5 mt-4">Hak Cipta © 2025 Izwan Ahmad, UiTM Tapah Perak.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize username, ensuring consistency across pages using localStorage
+        let username = localStorage.getItem('yulaoshi_username');
+        const usernameOverlay = document.getElementById('usernameOverlay');
+        const usernameInput = document.getElementById('usernameInput');
+        const startButton = document.getElementById('startButton');
+
+        let currentPoints = 0; // Initialize global points variable
+
+        // Function to update points and badge display on the page
+        function updatePointsDisplay(points) {
+            currentPoints = points;
+            document.getElementById('currentPointsMobile').textContent = points;
+            document.getElementById('currentPointsDesktop').textContent = points;
+
+            // Update badge based on points
+            const badgeMobile = document.getElementById('currentBadgeMobile');
+            const badgeDesktop = document.getElementById('currentBadgeDesktop');
+
+            let badgeText = "";
+            let badgeClass = "";
+
+            if (points >= 300) {
+                badgeText = "Mahaguru Mandarin! 🏆";
+                badgeClass = "master";
+            } else if (points >= 200) {
+                badgeText = "Master Pinyin! ✨";
+                badgeClass = "advanced";
+            } else if (points >= 100) {
+                badgeText = "Pencapaian Hebat! 💪";
+                badgeClass = "intermediate";
+            } else if (points >= 1) { // For any points greater than 0
+                badgeText = "Pelajar Baru! ⭐";
+                badgeClass = "beginner";
+            }
+
+            badgeMobile.textContent = badgeText;
+            badgeDesktop.textContent = badgeText;
+
+            badgeMobile.className = `badge-display ${badgeClass}`;
+            badgeDesktop.className = `badge-display ${badgeClass}`;
+        }
+
+        // Function to display username - MODIFIED FOR ROBUSTNESS
+        function displayUsername() {
+            const displayNameEl = document.getElementById('displayNameDesktop');
+            // Ensure username is not null, undefined, or the string "null" / "undefined" / corrupted
+            if (username && username !== "null" && username !== "undefined" && !username.startsWith('pelajar_') && !username.includes('_null')) {
+                displayNameEl.textContent = ` (${username})`;
+            } else {
+                displayNameEl.textContent = ''; // Clear display if no valid username
+            }
+        }
+
+        // Handle username input and start button
+        startButton.addEventListener('click', () => {
+            const enteredName = usernameInput.value.trim();
+            if (enteredName) {
+                username = enteredName;
+                localStorage.setItem('yulaoshi_username', username);
+                usernameOverlay.style.display = 'none'; // Hide the overlay
+                displayUsername(); // Display username on the page
+                loadInitialData(); // Load suggestions and points after username is set
+
+                // Send the username to the backend to ensure it's created/updated in the DB
+                fetch('/create_or_update_user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username: username })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("User creation/update response:", data.message);
+                    if (data.points !== undefined) {
+                        updatePointsDisplay(data.points);
+                    }
+                })
+                .catch(error => console.error('Error sending username to backend:', error));
+
+            } else {
+                alert('Sila masukkan nama anda untuk bermula.');
+            }
+        });
+
+        usernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                startButton.click();
+            }
+        });
+
+        // Function to load initial data (suggestions and points)
+        function loadInitialData() {
+            loadSuggestions(); // Load chat suggestions
+
+            // Fetch initial user points
+            fetch(`/get_user_points?username=${username}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Initial points data:", data);
+                    if (data.points !== undefined) {
+                        updatePointsDisplay(data.points);
+                    }
+                })
+                .catch(error => console.error('Error fetching initial points:', error));
+        }
+
+        // Check if username exists on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOMContentLoaded - Initial username from localStorage:", username);
+            if (username) {
+                // Also check if the username is the "pelajar_pelajar_..." type of corrupted string or contains "_null"
+                if (username.startsWith('pelajar_') || username === 'null' || username === 'undefined' || username.includes('_null')) {
+                    localStorage.removeItem('yulaoshi_username'); // Clear bad data
+                    usernameOverlay.style.display = 'flex'; // Show overlay
+                    username = null; // Ensure username is truly null for the session
+                    console.warn("Corrupted or invalid username detected and cleared from localStorage. Prompting for new username.");
+                } else {
+                    usernameOverlay.style.display = 'none'; // Hide if already set and valid
+                    displayUsername(); // Display username
+                    loadInitialData(); // Load data directly
+                }
+            } else {
+                usernameOverlay.style.display = 'flex'; // Show if not set
+                console.log("No username found in localStorage. Displaying username overlay.");
+            }
+        });
+
+        // Function to load suggestions
+        function loadSuggestions() {
+            // Ensure username is set before fetching suggestions
+            if (!username) {
+                console.warn("Username not set, cannot load suggestions.");
+                document.getElementById('suggestionList').innerHTML =
+                    '<div class="suggestion-item"><div class="pinyin-block">Sila masukkan nama anda untuk cadangan.</div></div>';
+                return;
+            }
+
+            fetch(`/suggestions?username=${username}`) // Pass username to suggestions endpoint
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Suggestions data:", data);
+                    const suggestions = data.suggestions;
+                    parseSuggestions(suggestions);
+                })
+                .catch(error => {
+                    console.error('Error loading suggestions:', error);
+                    document.getElementById('suggestionList').innerHTML =
+                        '<div class="suggestion-item"><div class="pinyin-block">Ralat memuatkan cadangan</div></div>';
+                });
+        }
+
+        // Parse and display suggestions
+        function parseSuggestions(text) {
+            const suggestionList = document.getElementById('suggestionList');
+            suggestionList.innerHTML = '';
+
+            const items = text.split('\n\n');
+            items.forEach(item => {
+                if(item.trim() === '') return;
+
+                const lines = item.split('\n');
+                let pinyin = '';
+                let translation = '';
+
+                lines.forEach(line => {
+                    if(line.startsWith('Pinyin:')) {
+                        pinyin = line.replace('Pinyin:', '').trim();
+                    } else if(line.startsWith('Terjemahan:')) {
+                        translation = line.replace('Terjemahan:', '').trim();
+                    }
+                });
+
+                if(pinyin && translation) {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'suggestion-item';
+                    suggestionItem.innerHTML = `
+                        <div class="pinyin-block">${pinyin}</div>
+                        <div class="translation">${translation}</div>
+                    `;
+
+                    // Add click event to use suggestion
+                    suggestionItem.addEventListener('click', () => {
+                        document.getElementById('messageInput').value = pinyin;
+                        sendMessage();
+                    });
+
+                    suggestionList.appendChild(suggestionItem);
+                }
+            });
+
+            // Add a message if no suggestions found
+            if(suggestionList.children.length === 0) {
+                suggestionList.innerHTML =
+                    '<div class="suggestion-item"><div class="pinyin-block">Tiada cadangan</div></div>';
+            }
+        }
+
+        // Send message function
+        document.getElementById('sendButton').addEventListener('click', sendMessage);
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+
+            if(message) {
+                // Add user message to chat
+                addMessageToChat(message, 'user');
+                input.value = '';
+
+                // Show typing indicator
+                showTypingIndicator();
+
+                // Send to backend
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        username: username
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideTypingIndicator();
+                    addBotResponse(data);
+
+                    // Update points displayed on the page
+                    if (data.points !== undefined) {
+                        updatePointsDisplay(data.points);
+                    }
+
+                    // Reload suggestions after response
+                    loadSuggestions();
+                })
+                .catch(error => {
+                    hideTypingIndicator();
+                    addMessageToChat("Maaf, berlaku ralat. Sila cuba lagi.", 'bot', {pinyin: "Wǒ bù zhīdào.", translation: "Saya tidak pasti."});
+                    console.error('Chat error:', error);
+                });
+            }
+        }
+
+        // Function to add message to chat
+        // Changed to accept a data object for bot responses, even if sender is 'bot'
+        function addMessageToChat(content, sender, botData = null) {
+            const chatBody = document.getElementById('chatBody');
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}-message`;
+
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <strong>Anda</strong>
+                    <div class="message-content mt-2">${content}</div>
+                    <div class="message-time">${timeString}</div>
+                `;
+            } else { // sender is 'bot'
+                let pinyinContent = botData && botData.pinyin ? botData.pinyin : 'Ralat pinyin';
+                let translationContent = botData && botData.translation ? botData.translation : 'Error translation';
+
+                // If content is just a string, try to split it for basic display (less ideal)
+                if (typeof content === 'string' && !botData) {
+                    const lines = content.split('\n');
+                    pinyinContent = lines[0].startsWith('Pinyin:') ? lines[0].replace('Pinyin:', '').trim() : lines[0].trim();
+                    translationContent = lines.length > 1 && lines[1].startsWith('Terjemahan:') ? lines[1].replace('Terjemahan:', '').trim() : (lines.length > 1 ? lines[1].trim() : '...');
+                }
+
+                messageDiv.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <strong>YuLaoshi</strong>
+                        <span class="language-tag">Tutor AI</span>
+                    </div>
+                    <div class="message-content mt-2">
+                        <div class="pinyin-phrase">${pinyinContent}</div>
+                        <div class="phrase-translation">${translationContent}</div>
+                    </div>
+                    <div class="message-time">${timeString}</div>
+                `;
+            }
+
+            chatBody.appendChild(messageDiv);
+
+            // Scroll to bottom
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Function to add bot response (now simpler as addMessageToChat handles structure)
+        function addBotResponse(data) {
+            addMessageToChat(null, 'bot', data); // Pass null for content, data for botData
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.style.display = 'flex';
+
+            const chatBody = document.getElementById('chatBody');
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.style.display = 'none';
+        }
+
+        /* The clear history button is removed from the HTML, so this function is no longer directly called by a button click.
+           If you still need to programmatically clear history, you can call this function from other parts of your JS code.
+        document.getElementById('clearHistoryButton').addEventListener('click', () => {
+            fetch('/clear', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username }) // Pass username to clear history
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                document.getElementById('chatBody').innerHTML = `
+                    <div class="chat-message bot-message">
+                        <div class="d-flex align-items-center">
+                            <strong>YuLaoshi</strong>
+                            <span class="language-tag">Tutor AI</span>
+                        </div>
+                        <div class="message-content mt-2">
+                            <div class="pinyin-phrase">Nǐ hǎo!</div>
+                            <div class="phrase-translation">Helo!</div>
+                            Saya Yu Laoshi, tutor Mandarin anda. Apa yang anda ingin praktik hari ini? Kami boleh praktik perbualan, sebutan, atau belajar kosa kata baru.
+                        </div>
+                        <div class="message-time">Baru sahaja</div>
+                    </div>
+                `;
+                loadSuggestions(); // Reload suggestions after clearing history
+            })
+            .catch(error => {
+                console.error('Error clearing history:', error);
+                alert('Ralat semasa mengosongkan sejarah.');
+            });
+        });
+        */
+    </script>
+</body>
+</html>

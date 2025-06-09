@@ -1,0 +1,332 @@
+/*
+  TemplateMo 590 topic listing
+  https://templatemo.com/tm-590-topic-listing
+*/
+
+/*---------------------------------------
+  CHINESE TUTOR CHAT THEME
+-----------------------------------------*/
+        :root {
+            --primary-color: #2a4365;
+            --accent-color: #e53e3e;
+            --light-color: #f7fafc;
+            --dark-color: #1a202c;
+            --chat-user-bg: #ebf8ff;
+            --chat-bot-bg: #f7fafc;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--dark-color);
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+        }
+
+        .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: white !important;
+        }
+
+        .navbar-brand i {
+            margin-right: 8px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), #4c6cb3);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .featured-section {
+            padding: 60px 0;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: -50px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .chat-container {
+            border-radius: 10px;
+            overflow: hidden;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .chat-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+
+        .chat-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f0f4f8;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            position: relative;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bot-message {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .user-message {
+            background-color: var(--chat-user-bg);
+            border: 1px solid #bee3f8;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #718096;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .chat-input {
+            padding: 15px;
+            background-color: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            border-radius: 25px;
+            padding: 12px 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .chat-input button {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+        }
+
+        .suggestion-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            height: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .suggestion-card h5 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .suggestion-list {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background-color: var(--light-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .suggestion-item:hover {
+            background-color: #e6fffa;
+            transform: translateX(5px);
+        }
+
+        .pinyin-block {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .translation {
+            font-size: 0.9rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .search-container {
+            margin-top: 30px;
+            background: white;
+            border-radius: 50px;
+            padding: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container .input-group {
+            height: 60px;
+        }
+
+        .search-container .form-control {
+            border: none;
+            border-radius: 50px 0 0 50px !important;
+            padding-left: 25px;
+            font-size: 1.1rem;
+        }
+
+        .search-container .btn {
+            border-radius: 0 50px 50px 0;
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: 600;
+            padding: 0 30px;
+            font-size: 1.1rem;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: white;
+            border-radius: 18px;
+            border: 1px solid #e2e8f0;
+            align-self: flex-start;
+            width: auto;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #a0aec0;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        .language-tag {
+            background-color: #e6f7ff;
+            color: #1890ff;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        .pinyin-phrase {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .phrase-translation {
+            font-size: 0.95rem;
+            color: var(--dark-color);
+            background-color: #f0f7ff;
+            padding: 5px 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+
+        .site-footer-title {
+            color: #cbd5e0;
+            font-size: 1.1rem;
+        }
+
+        .site-footer-link {
+            color: #a0aec0 !important;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .site-footer-link:hover {
+            color: white !important;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0;
+            }
+
+            .featured-section {
+                padding: 30px 15px;
+            }
+
+            .chat-container, .suggestion-card {
+                height: 400px;
+            }
+        }
+        .colorful-btn {
+          display: inline-block;
+          padding: 14px 36px;
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: #fff;
+          background: linear-gradient(135deg, #f79ab0 0%, #f7638d 100%);
+          border: none;
+          border-radius: 40px;
+          text-decoration: none;
+          box-shadow: 0 6px 16px rgba(247, 99, 141, 0.4);
+          transition: all 0.3s ease;
+        }
+
+        .colorful-btn:hover {
+          background: linear-gradient(135deg, #f7638d 0%, #f79ab0 100%);
+          transform: translateY(-3px);
+          box-shadow: 0 8px 20px rgba(247, 99, 141, 0.5);
+        }
+
+        .colorful-btn:active {
+          transform: scale(0.97);
+          box-shadow: 0 4px 10px rgba(247, 99, 141, 0.4);
+        }

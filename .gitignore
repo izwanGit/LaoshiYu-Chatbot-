@@ -1,0 +1,14 @@
+# Environment variables
+app.env
+
+# Database file (if it's generated and not part of the source)
+instance/mandarin_learning.db
+
+# Python specific ignores
+__pycache__/
+*.pyc
+.ipynb_checkpoints/ # If you use Jupyter notebooks
+venv/ # If you have a virtual environment folder
+
+# IDE files
+.idea/
