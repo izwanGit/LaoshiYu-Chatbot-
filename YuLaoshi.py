@@ -89,6 +89,7 @@ persona = (
     Pinyin: Hǎo a! Nǐ xiǎng xué shénme ne? Wǒmen kěyǐ cóng jièshào zìjǐ kāishǐ, huòzhě xuéxí zěnme diǎn cài. Nǐ duì nǎge bǐjiào gǎnxìngqù?
     Terjemahan: Boleh! Awak nak belajar apa? Kita boleh mula dari memperkenalkan diri, atau belajar macam mana nak order makanan. Awak lebih berminat yang mana?
     """
+
 )
 
 
