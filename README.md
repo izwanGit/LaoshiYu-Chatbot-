@@ -1,141 +1,116 @@
-# 🏮 YuLaoshi: Your Premier AI-Powered Mandarin Tutor
+<div align="center">
 
-![YuLaoshi Cover](https://raw.githubusercontent.com/izwanGit/LaoshiYu-Chatbot-/main/static/icons/YuLaoshi_icon.png)
+# 🏮 YuLaoshi (宇老师)
+### *Your Infinite AI Mandarin Companion*
 
-> **"Bridging the language gap with AI, one Pinyin at a time."**
-
----
-
-### 🌐 [Live Demo: Experience YuLaoshi Here](https://izwan.pythonanywhere.com/)
-
----
-
-**YuLaoshi** is a cutting-edge educational platform designed to help Malaysian students (specifically for the TMC501 course) master Mandarin Chinese. By leveraging the latest in Generative AI and Neural Text-to-Speech, it provides a friendly, low-pressure environment for practicing conversation and listening comprehension.
+[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-Visit_Site-2ea44f?style=for-the-badge&logo=google-chrome&logoColor=white)](https://izwan.pythonanywhere.com/)
+[![GitHub stars](https://img.shields.io/github/stars/izwanGit/LaoshiYu-Chatbot-?style=for-the-badge&color=ffd700)](https://github.com/izwanGit/LaoshiYu-Chatbot-/stargazers)
+[![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 
 ---
 
-## 🏗️ System Architecture
+## 🖥️ System Showcase
+**Experience a seamless, interactive journey into the Mandarin language.**
 
-The following diagram illustrates how the frontend, backend, and external AI services interact:
+![YuLaoshi Interface](static/icons/interface.png)
+
+*A clean, modern, and intuitive interface designed for the next generation of language learners.*
+
+---
+
+</div>
+
+## 🌟 Overview
+**YuLaoshi** represents a leap forward in language education. It is not just a chatbot; it's a personalized tutor that understands the nuances of language learning. Built with **GPT-4o** via OpenRouter and powered by **Google's Neural TTS**, it bridges the gap between static textbooks and real-world conversation.
+
+### 🚀 Core Pillars
+*   **Contextual Intelligence:** Responds with Pinyin and Malay translations for every sentence.
+*   **Crystal Clear Audio:** High-fidelity Mandarin pronunciation using neural speech engines.
+*   **Gamified Growth:** A comprehensive point and badge system that rewards consistency.
+*   **Smart Suggestions:** Stuck? The AI suggests what you should say next based on the chat history.
+
+---
+
+## 🛠️ Technical Architecture
 
 ```mermaid
-graph TD
-    User((User/Student)) -- Interacts --> UI[Web Interface - HTML/JS/Bootstrap]
-    UI -- API Requests --> Flask[Flask Backend - Python]
+graph LR
+    A[User Engagement] --> B{Flask Backend}
+    B --> C[AI Intelligence - OpenRouter]
+    B --> D[Vocal Engine - Google TTS]
+    B --> E[Persistence - SQLite]
     
-    subgraph AI Service Layer
-        Flask -- Prompts/History --> OpenRouter[OpenRouter AI - GPT-4o-mini]
-        Flask -- Text-to-Synthesize --> EdgeTTS[Microsoft Edge Neural TTS]
+    subgraph "AI Services"
+    C --- C1(GPT-4o Mini)
+    C --- C2(Conversation Logic)
     end
     
-    subgraph Data & Persistence
-        Flask -- Save/Load Points --> SQLite[(SQLite Database)]
-        Flask -- Load Config --> Env[app.env]
+    subgraph "Frontend"
+    A --- A1(Bootstrap 5)
+    A --- A2(Interactive JS)
     end
-    
-    OpenRouter -- JSON Response --> Flask
-    EdgeTTS -- MP3 Stream --> Flask
-    Flask -- Pinyin/Malay/Audio --> UI
 ```
 
 ---
 
-## 🎯 Core Features & Functionality
+## 🎮 The Gamification Engine
+Learning a language is a marathon. YuLaoshi makes it feel like a game.
 
-| Feature | Description | Tech Used |
-| :--- | :--- | :--- |
-| **Intelligent Chatbot** | Personality-driven AI tutor that focuses on Pinyin and Malay translations. | OpenRouter (GPT-3.5/4) |
-| **Listening Quiz** | Dynamically generated audio quizzes with human-like Mandarin voices. | GPT-4o + Edge TTS |
-| **Neural TTS** | Professional-grade Mandarin pronunciation (Xiaoxiao voice). | `edge-tts` |
-| **Gamification** | Points, levels, and badges system to keep students motivated. | SQLite + Javascript |
-| **Responsive UI** | Mobile-first design that works on phones, tablets, and desktops. | Bootstrap 5 + CSS3 |
-| **Smart Suggestions** | Context-aware response templates to help users continue chatting. | OpenAI Completion |
+### **Progression Tiers**
+| Points | Badge Label | Rarity | Visual |
+| :--- | :--- | :--- | :--- |
+| **300+** | Mahaguru Mandarin! | 💎 Legendary | 🏆 |
+| **200+** | Master Pinyin! | 🔴 Epic | ✨ |
+| **100+** | Pencapaian Hebat! | 🟡 Rare | 💪 |
+| **1+** | Pelajar Baru! | 🔵 Common | ⭐ |
 
----
-
-## 🏆 Gamification: Progression System
-
-YuLaoshi is designed to be addictive. The more you learn, the higher you climb.
-
-### 📊 Point Accumulation Logic (Quiz)
-| Quiz Score (%) | Points Awarded | Bonus Label |
-| :--- | :--- | :--- |
-| **100% (Perfect)** | +50 Points | Exceptional! |
-| **70% - 99%** | +20 Points | Great Work! |
-| **30% - 69%** | +10 Points | Keep Practicing! |
-| **< 30%** | +0 Points | Try Again! |
-
-### 🏅 Achievement Badges
-| Badge Name | Required Points | Color Theme |
-| :--- | :--- | :--- |
-| **Mahaguru Mandarin! 🏆** | 300+ | Purple (Master) |
-| **Master Pinyin! ✨** | 200+ | Red (Advanced) |
-| **Pencapaian Hebat! 💪** | 100+ | Yellow (Intermediate) |
-| **Pelajar Baru! ⭐** | 1+ | Blue (Beginner) |
+### **Scoring Mechanics**
+*   **Perfect Quiz Score:** +50 Points
+*   **Great Performance (70%+):** +25 Points
+*   **Active Chatting:** Points awarded for meaningful interactions.
 
 ---
 
-## 🛠️ Detailed File Structure
-
-```text
-LaoshiYu-Chatbot-/
-├── YuLaoshi.py             # Main Flask Application (The "Brain")
-├── app.env                  # Environment Variables (API Keys) - HIDDEN
-├── requirements.txt         # List of Python dependencies
-├── Procfile                 # Deployment instructions for PaaS (Heroku/Railway)
-├── mandarin_learning.db     # SQLite Database (Auto-generated)
-├── static/                  # Static Assets
-│   ├── css/                 # Custom Styling & Bootstrap
-│   ├── fonts/               # Web Fonts & Icons
-│   ├── icons/               # User Interface Icons
-│   └── images/              # Media Assets
-├── templates/               # HTML Pages
-│   ├── index.html           # Main Chat Interface
-│   └── quiz.html            # Listening Quiz Page
-└── instance/                # Flask instance-specific files
+## 📦 Project Structure
+```bash
+📂 LaoshiYu-Chatbot/
+├── 📄 YuLaoshi.py           # Core Logic & Routing
+├── 📄 requirements.txt       # Dependencies
+├── 📂 static/
+│   ├── 📂 css/              # UI Frameworks
+│   ├── 📂 icons/            # Interface Assets
+│   └── 🎨 interface.png     # Application Showcase
+├── 📂 templates/
+│   ├── 🏠 index.html        # Chat Hub
+│   └── 🎯 quiz.html         # Listening Lab
+└── 🗄️ instance/             # Database & Local State
 ```
 
 ---
 
-## � API Endpoints (Documentation)
+## ⚙️ Fast Setup
 
-### 1. Chat & AI
-- `POST /chat`: Sends user message to AI and returns Pinyin/Translation.
-- `GET /suggestions`: Returns 4 context-based Mandarin phrases for the user to pick.
-- `POST /clear`: Resets the current user's conversation history.
+### **1. Clone & Prep**
+```bash
+git clone https://github.com/izwanGit/LaoshiYu-Chatbot-.git
+cd LaoshiYu-Chatbot-
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-### 2. Quiz & Voice
-- `GET /generate_quiz`: Generates a randomized 5-question listening test.
-- `GET /quiz_audio/<audio_data>`: Streams high-quality Neural MP3 audio for any Mandarin text.
-- `POST /submit_quiz_result`: Processes score and updates user points in the database.
-
-### 3. User Management
-- `POST /create_or_update_user`: Initializes or retrieves a user profile.
-- `GET /get_user_points`: Retrieves the current point balance for a user.
-
----
-
-## 💻 Technical Setup & Deployment
-
-### Local Development
-1. **Prepare Environment**: `python -m venv .venv && source .venv/bin/activate`
-2. **Install Packages**: `pip install -r requirements.txt`
-3. **Set API Key**: Add your OpenRouter/OpenAI key to `app.env`.
-4. **Launch**: `python YuLaoshi.py`
-
-### PythonAnywhere Setup Flow
-1. **GitHub Sync**: `git clone` your repo in the Bash console.
-2. **Virtualenv**: Use `mkvirtualenv --python=/usr/bin/python3.10 myenv`.
-3. **WSGI Config**: Point `application` to `from YuLaoshi import app as application`.
-4. **Static Mapping**: Link `/static/` URL to your `static/` directory path.
+### **2. Launch**
+```bash
+python YuLaoshi.py
+```
+*App will be live at `http://127.0.0.1:5000`*
 
 ---
 
-## 🎓 Academic Context
-*   **Course:** TMC501 (Mandarin II)
-*   **Institution:** Universiti Teknologi MARA (UiTM), Tapah Campus.
-*   **Developer:** Muhammad Izwan bin Ahmad (2024938885)
-*   **Class:** A4CDCS2305A
+## ✍️ Author
+**Muhammad Izwan bin Ahmad**  
+*Universiti Teknologi MARA (UiTM), Kampus Tapah, Perak.*
 
 ---
-**Disclaimer:** *The information provided by the AI is for educational practice. Always consult with your sensei/laoshi for academic evaluation.*
+<div align="center">
+    <b>Built with ❤️ for Mandarin learners everywhere.</b>
+</div>
