@@ -6,6 +6,7 @@
 [![Live Demo](https://img.shields.io/badge/LIVE_DEMO-Visit_Site-2ea44f?style=for-the-badge&logo=google-chrome&logoColor=white)](https://izwan.pythonanywhere.com/)
 [![GitHub stars](https://img.shields.io/github/stars/izwanGit/LaoshiYu-Chatbot-?style=for-the-badge&color=ffd700)](https://github.com/izwanGit/LaoshiYu-Chatbot-/stargazers)
 [![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.1-black?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 
 ---
 
@@ -31,23 +32,63 @@
 
 ---
 
+## 💎 Features in Detail
+
+### 💬 1. Intelligent Chat Companion
+The chatbot is fine-tuned to act as a **supportive Mandarin Sensei**. It doesn't just talk; it teaches.
+
+| Capability | Technical Implementation | User Benefit |
+| :--- | :--- | :--- |
+| **Triple Response** | OpenRouter LLM parsing | Get Hanzi, Pinyin, and Malay in one go. |
+| **Contextual Memory** | Session-based history management | The AI remembers what you talked about earlier. |
+| **Auto-Suggestions** | Real-time context analysis | Never run out of things to say. |
+
+### 🎯 2. The Listening Lab (Quiz)
+A dynamic testing environment that uses AI to generate unique challenges.
+
+| Test Type | Sound Engine | Objective |
+| :--- | :--- | :--- |
+| **Pinyin Mastery** | Google Neural TTS | Match the audio to the correct Pinyin representation. |
+| **Comprehension** | High-Fidelity Audio | Understand the meaning of spoken Mandarin sentences. |
+| **Instant Feedback** | Javascript Logic | Know your score immediately after the last question. |
+
+---
+
+## 🛠️ Technology Stack Detail
+
+| Component | Technology | Role |
+| :--- | :--- | :--- |
+| **Language** | Python 3.10+ | Core application logic. |
+| **Web Framework** | Flask 3.1 | Routing, API handling, and server management. |
+| **Brain (LLM)** | GPT-4o (via OpenRouter) | Natural language understanding and generation. |
+| **Vocal Engine** | gTTS | Converting Mandarin text into human-like audio. |
+| **Database** | SQLite + SQLAlchemy | Storing user progress, points, and history. |
+| **UI/UX** | Bootstrap 5 + Custom CSS | Responsive and aesthetic frontend design. |
+
+---
+
 ## 🛠️ Technical Architecture
 
 ```mermaid
-graph LR
+graph TD
     A[User Engagement] --> B{Flask Backend}
     B --> C[AI Intelligence - OpenRouter]
     B --> D[Vocal Engine - Google TTS]
     B --> E[Persistence - SQLite]
     
-    subgraph "AI Services"
+    subgraph "AI Services Layer"
     C --- C1(GPT-4o Mini)
     C --- C2(Conversation Logic)
     end
     
-    subgraph "Frontend"
-    A --- A1(Bootstrap 5)
-    A --- A2(Interactive JS)
+    subgraph "Frontend Layer"
+    A --- A1(Bootstrap 5 Template)
+    A --- A2(Dynamic Javascript)
+    end
+    
+    subgraph "Storage Layer"
+    E --- E1(User Profiles)
+    E --- E2(Point Systems)
     end
 ```
 
@@ -65,32 +106,33 @@ Learning a language is a marathon. YuLaoshi makes it feel like a game.
 | **1+** | Pelajar Baru! | 🔵 Common | ⭐ |
 
 ### **Scoring Mechanics**
-*   **Perfect Quiz Score:** +50 Points
-*   **Great Performance (70%+):** +25 Points
-*   **Active Chatting:** Points awarded for meaningful interactions.
+*   **Perfect Quiz Score:** +50 Points (Legendary Performance)
+*   **Great Performance (70%+):** +25 Points (Advanced)
+*   **Participation points:** Points awarded for active chatting and engagement.
 
 ---
 
 ## 📦 Project Structure
 ```bash
 📂 LaoshiYu-Chatbot/
-├── 📄 YuLaoshi.py           # Core Logic & Routing
-├── 📄 requirements.txt       # Dependencies
+├── 📄 YuLaoshi.py           # Main application engine
+├── 📄 requirements.txt       # Software dependencies
 ├── 📂 static/
-│   ├── 📂 css/              # UI Frameworks
-│   ├── 📂 icons/            # Interface Assets
-│   └── 🎨 interface.png     # Application Showcase
+│   ├── 📂 css/              # Styling & Visual tokens
+│   ├── 📂 icons/            # Digital assets & emojis
+│   └── 🎨 interface.png     # Application showcase image
 ├── 📂 templates/
-│   ├── 🏠 index.html        # Chat Hub
-│   └── 🎯 quiz.html         # Listening Lab
-└── 🗄️ instance/             # Database & Local State
+│   ├── 🏠 index.html        # Main Chat Dashboard
+│   └── 🎯 quiz.html         # Interactive Quiz Module
+└── 🗄️ instance/             # Local database & state management
 ```
 
 ---
 
-## ⚙️ Fast Setup
+## ⚙️ Deployment & Setup
 
-### **1. Clone & Prep**
+### **Local Development**
+1. **Clone & Prep**
 ```bash
 git clone https://github.com/izwanGit/LaoshiYu-Chatbot-.git
 cd LaoshiYu-Chatbot-
@@ -98,19 +140,33 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### **2. Launch**
+2. **Launch**
 ```bash
 python YuLaoshi.py
 ```
-*App will be live at `http://127.0.0.1:5000`*
+
+### **PythonAnywhere Hosting**
+*   **WSGI Handling:** Configure your WSGI file to point to `YuLaoshi.py`.
+*   **Environment:** Ensure `OPENAI_API_KEY` is set in your `app.env` or server config.
+*   **Static Mapping:** Route `/static/` to your project's static folder.
 
 ---
 
-## ✍️ Author
+## 💡 Future Roadmap
+- [ ] **Voice Input:** Allow users to speak to YuLaoshi using their microphone.
+- [ ] **HSK Tracking:** Align lessons with official HSK levels (HSK 1-3).
+- [ ] **Leaderboard:** Compete with other students in real-time.
+- [ ] **Mobile App:** Native Android/iOS version for learning on the go.
+
+---
+
+## 👨‍💻 DEVELOPED BY
 **Muhammad Izwan bin Ahmad**  
 *Universiti Teknologi MARA (UiTM), Kampus Tapah, Perak.*
 
 ---
 <div align="center">
-    <b>Built with ❤️ for Mandarin learners everywhere.</b>
+    <b>Built with ❤️ for Mandarin learners in Malaysia.</b>
+    <br>
+    <i>Turning language learning into an adventure.</i>
 </div>
