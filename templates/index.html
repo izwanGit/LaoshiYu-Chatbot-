@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ms">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YuLaoshi - Belajar Bahasa Mandarin Chatbot</title>
     <link rel="icon" href="{{ url_for('static', filename='icons/YuLaoshi_icon.png') }}" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
@@ -14,22 +16,42 @@
     <style>
         /* Basic styling for the badge */
         .badge-display {
-            background-color: #28a745; /* Green for motivation */
+            background-color: #28a745;
+            /* Green for motivation */
             color: white;
             padding: 0.3em 0.6em;
             border-radius: 0.25rem;
             font-size: 0.85em;
             font-weight: 600;
             margin-left: 10px;
-            white-space: nowrap; /* Prevent text from wrapping */
+            white-space: nowrap;
+            /* Prevent text from wrapping */
             vertical-align: middle;
             display: inline-flex;
             align-items: center;
         }
-        .badge-display.beginner { background-color: #007bff; } /* Blue */
-        .badge-display.intermediate { background-color: #ffc107; color: #333; } /* Yellow */
-        .badge-display.advanced { background-color: #dc3545; } /* Red */
-        .badge-display.master { background-color: #6f42c1; } /* Purple */
+
+        .badge-display.beginner {
+            background-color: #007bff;
+        }
+
+        /* Blue */
+        .badge-display.intermediate {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        /* Yellow */
+        .badge-display.advanced {
+            background-color: #dc3545;
+        }
+
+        /* Red */
+        .badge-display.master {
+            background-color: #6f42c1;
+        }
+
+        /* Purple */
         /* Overlay for username input */
         .overlay {
             position: fixed;
@@ -41,8 +63,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1050; /* Above Bootstrap modals */
+            z-index: 1050;
+            /* Above Bootstrap modals */
         }
+
         .username-prompt {
             background: white;
             padding: 30px;
@@ -52,6 +76,7 @@
             max-width: 400px;
             width: 90%;
         }
+
         .username-prompt input {
             width: 100%;
             padding: 10px;
@@ -60,6 +85,7 @@
             border-radius: 5px;
             font-size: 1rem;
         }
+
         .username-prompt button {
             padding: 10px 30px;
             background-color: #2a4365;
@@ -69,11 +95,76 @@
             cursor: pointer;
             font-size: 1rem;
         }
+
         .username-prompt button:hover {
             background-color: #4a6da7;
         }
+
+        /* Third box for kosa kata / extra teaching info */
+        /* Updated Third Box Styling - COMPACT List */
+        .explanation-container {
+            margin-top: 8px;
+            background: linear-gradient(135deg, #f8f4ff 0%, #edf2f7 100%);
+            border-radius: 10px;
+            padding: 6px;
+            border-left: 3px solid #6f42c1;
+        }
+
+        .explanation-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 5px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px 8px;
+            border-radius: 6px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .explanation-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .exp-icon {
+            font-size: 0.9rem;
+            margin-right: 6px;
+            margin-top: 2px;
+        }
+
+        .exp-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .exp-pinyin {
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+
+        .exp-trans {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-top: 1px;
+            line-height: 1.3;
+        }
+
+        /* Legacy support if needed */
+        .explanation-box {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f8f4ff;
+            border-left: 4px solid #6f42c1;
+            border-radius: 8px;
+        }
+
+        .explanation-box br {
+            display: block;
+            margin-bottom: 4px;
+        }
     </style>
 </head>
+
 <body>
     <div id="usernameOverlay" class="overlay">
         <div class="username-prompt">
@@ -99,7 +190,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    </ul>
+                </ul>
                 <div class="d-none d-lg-flex ms-3 align-items-center">
                     <span class="text-white fw-bold">Mata Anda: <span id="currentPointsDesktop">0</span></span>
                     <span id="currentBadgeDesktop" class="badge-display"></span>
@@ -114,7 +205,8 @@
             <div class="row">
                 <div class="col-lg-8 col-12 mx-auto">
                     <h1 class="text-white text-center">Belajar Bahasa Mandarin Dengan YuLaoshi</h1>
-                    <h6 class="text-center">Tutor AI peribadi anda untuk belajar Mandarin (TMC501). Berlatih perbualan, sebutan, dan banyak lagi!</h6>
+                    <h6 class="text-center">Tutor AI peribadi anda untuk belajar Mandarin (TMC501). Berlatih perbualan,
+                        sebutan, dan banyak lagi!</h6>
                 </div>
             </div>
         </div>
@@ -148,7 +240,8 @@
                             <div class="message-content mt-2">
                                 <div class="pinyin-phrase">Nǐ hǎo!</div>
                                 <div class="phrase-translation">Helo!</div>
-                                Saya Yu Laoshi, tutor Mandarin anda. Apa yang anda ingin praktik hari ini? Kami boleh praktik perbualan, sebutan, atau belajar kosa kata baru.
+                                Saya Yu Laoshi, tutor Mandarin anda. Apa yang anda ingin praktik hari ini? Kami boleh
+                                praktik perbualan, sebutan, atau belajar kosa kata baru.
                             </div>
                             <div class="message-time">Baru sahaja</div>
                         </div>
@@ -295,14 +388,14 @@
                     },
                     body: JSON.stringify({ username: username })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("User creation/update response:", data.message);
-                    if (data.points !== undefined) {
-                        updatePointsDisplay(data.points);
-                    }
-                })
-                .catch(error => console.error('Error sending username to backend:', error));
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("User creation/update response:", data.message);
+                        if (data.points !== undefined) {
+                            updatePointsDisplay(data.points);
+                        }
+                    })
+                    .catch(error => console.error('Error sending username to backend:', error));
 
             } else {
                 alert('Sila masukkan nama anda untuk bermula.');
@@ -332,7 +425,7 @@
         }
 
         // Check if username exists on page load
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             console.log("DOMContentLoaded - Initial username from localStorage:", username);
             if (username) {
                 // Also check if the username is the "pelajar_pelajar_..." type of corrupted string or contains "_null"
@@ -383,21 +476,21 @@
 
             const items = text.split('\n\n');
             items.forEach(item => {
-                if(item.trim() === '') return;
+                if (item.trim() === '') return;
 
                 const lines = item.split('\n');
                 let pinyin = '';
                 let translation = '';
 
                 lines.forEach(line => {
-                    if(line.startsWith('Pinyin:')) {
+                    if (line.startsWith('Pinyin:')) {
                         pinyin = line.replace('Pinyin:', '').trim();
-                    } else if(line.startsWith('Terjemahan:')) {
+                    } else if (line.startsWith('Terjemahan:')) {
                         translation = line.replace('Terjemahan:', '').trim();
                     }
                 });
 
-                if(pinyin && translation) {
+                if (pinyin && translation) {
                     const suggestionItem = document.createElement('div');
                     suggestionItem.className = 'suggestion-item';
                     suggestionItem.innerHTML = `
@@ -416,7 +509,7 @@
             });
 
             // Add a message if no suggestions found
-            if(suggestionList.children.length === 0) {
+            if (suggestionList.children.length === 0) {
                 suggestionList.innerHTML =
                     '<div class="suggestion-item"><div class="pinyin-block">Tiada cadangan</div></div>';
             }
@@ -424,7 +517,7 @@
 
         // Send message function
         document.getElementById('sendButton').addEventListener('click', sendMessage);
-        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+        document.getElementById('messageInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 sendMessage();
             }
@@ -434,7 +527,7 @@
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
 
-            if(message) {
+            if (message) {
                 // Add user message to chat
                 addMessageToChat(message, 'user');
                 input.value = '';
@@ -453,24 +546,24 @@
                         username: username
                     })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    hideTypingIndicator();
-                    addBotResponse(data);
+                    .then(response => response.json())
+                    .then(data => {
+                        hideTypingIndicator();
+                        addBotResponse(data);
 
-                    // Update points displayed on the page
-                    if (data.points !== undefined) {
-                        updatePointsDisplay(data.points);
-                    }
+                        // Update points displayed on the page
+                        if (data.points !== undefined) {
+                            updatePointsDisplay(data.points);
+                        }
 
-                    // Reload suggestions after response
-                    loadSuggestions();
-                })
-                .catch(error => {
-                    hideTypingIndicator();
-                    addMessageToChat("Maaf, berlaku ralat. Sila cuba lagi.", 'bot', {pinyin: "Wǒ bù zhīdào.", translation: "Saya tidak pasti."});
-                    console.error('Chat error:', error);
-                });
+                        // Reload suggestions after response
+                        loadSuggestions();
+                    })
+                    .catch(error => {
+                        hideTypingIndicator();
+                        addMessageToChat("Maaf, berlaku ralat. Sila cuba lagi.", 'bot', { pinyin: "Wǒ bù zhīdào.", translation: "Saya tidak pasti." });
+                        console.error('Chat error:', error);
+                    });
             }
         }
 
@@ -479,7 +572,7 @@
         function addMessageToChat(content, sender, botData = null) {
             const chatBody = document.getElementById('chatBody');
             const now = new Date();
-            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
             const messageDiv = document.createElement('div');
             messageDiv.className = `chat-message ${sender}-message`;
@@ -501,6 +594,24 @@
                     translationContent = lines.length > 1 && lines[1].startsWith('Terjemahan:') ? lines[1].replace('Terjemahan:', '').trim() : (lines.length > 1 ? lines[1].trim() : '...');
                 }
 
+                let extraContent = '';
+                if (botData && botData.explanation_items && botData.explanation_items.length > 0) {
+                    extraContent = '<div class="explanation-container">';
+                    botData.explanation_items.forEach(item => {
+                        extraContent += `
+                            <div class="explanation-item">
+                                <span class="exp-icon">📌</span>
+                                <div class="exp-text">
+                                    <span class="exp-pinyin">${item.pinyin}</span>
+                                    <span class="exp-trans">${item.translation}</span>
+                                </div>
+                            </div>`;
+                    });
+                    extraContent += '</div>';
+                } else if (botData && botData.explanation) {
+                    extraContent = `<div class="explanation-box">${botData.explanation.replace(/\n/g, '<br>')}</div>`;
+                }
+
                 messageDiv.innerHTML = `
                     <div class="d-flex align-items-center">
                         <strong>YuLaoshi</strong>
@@ -509,6 +620,7 @@
                     <div class="message-content mt-2">
                         <div class="pinyin-phrase">${pinyinContent}</div>
                         <div class="phrase-translation">${translationContent}</div>
+                        ${extraContent}
                     </div>
                     <div class="message-time">${timeString}</div>
                 `;
@@ -577,4 +689,5 @@
         */
     </script>
 </body>
+
 </html>

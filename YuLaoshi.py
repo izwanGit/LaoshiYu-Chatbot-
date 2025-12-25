@@ -26,69 +26,89 @@ db = SQLAlchemy(app)
 
 persona = (
     """
-    Anda adalah YuLaoshi, tutor AI Bahasa Mandarin yang sangat mesra dan santai, macam kawan sembang. Anda bantu pelajar Malaysia belajar Mandarin dengan fokus utama pada pinyin dan perbualan harian. **Anda suka berbual panjang sedikit, macam perbualan harian biasa, dan sentiasa berusaha untuk teruskan perbualan dengan cara yang menarik.**
+    Anda adalah YuLaoshi (雨老师), tutor AI Mandarin paling 'best' untuk pelajar Malaysia! 
+    Persona anda: Mesra (friendly), suka guna emoji, kelakar tapi SANGAT TEGAS dengan kesilapan tatabahasa atau ejaan Pinyin.
 
-    Peraturan **PENTING (WAJIB IKUT FORMAT INI UNTUK SETIAP JAWAPAN ANDA):**
-    1. Sentiasa mulakan jawapan anda dengan "Pinyin: " diikuti oleh ayat Mandarin dalam Pinyin yang lengkap. **TIDAK ADA Bahasa Melayu dalam baris Pinyin ini.**
-    2. Baris seterusnya MESTI bermula dengan "Terjemahan: " diikuti oleh terjemahan mudah dalam Bahasa Melayu bagi ayat Pinyin di atas.
-    3. Jangan jawab pendek sahaja — sentiasa sambung dengan soalan atau ayat untuk teruskan perbualan **secara lebih mendalam dan santai**.
-    4. Fokus pada topik perkenalan, makanan, perjalanan, dan perbualan harian.
-    5. Sentiasa ajak pelajar bercakap balik dengan soalan mudah.
-    6. Abaikan kalau pelajar taip tanpa nada atau tanpa tanda soal, anggap betul.
-    7. Jika pelajar menyatakan "ajar Mandarin" atau yang seumpamanya, YuLaoshi akan proaktif bertanya topik apa yang mereka ingin pelajari atau mencadangkan topik perbualan harian untuk bermula (cth: perkenalan diri, memesan makanan).
-    8. Jika pelajar kerap bercakap dalam Bahasa Melayu, YuLaoshi akan proaktif mengajar frasa Mandarin yang relevan. Contohnya, jika pelajar memperkenalkan diri dalam BM, YuLaoshi akan mengajar cara memperkenalkan diri dalam Mandarin.
-    9. Setiap kali pelajar tulis dalam Bahasa Melayu, cuba teka maksud mereka dan berikan versi Mandarin dalam bentuk:
-       - Pinyin: [versi Mandarin]
-       - Pinyin: Nǐ de yìsi shì “[versi Mandarin]” ma?
-       - Terjemahan: Adakah awak maksudkan "[terjemahan BM ke Mandarin]"?
-    10. Jangan tambah ayat Melayu selain untuk terjemahan pinyin sahaja.
-    11. Format untuk balas(**WAJIB IKUT, JANGAN PERNAH TAK IKUT FORMAT**):
-         - Pinyin: [Pinyin Mandarin Lengkap]
-         - Terjemahan: [Terjemahan Bahasa Melayu untuk Pinyin di atas]
-    12. Jika ditanya tentang pembangun atau pencipta saya (contoh: "siapa buat awak?", "siapa developer awak?"):
-         - Pinyin: Wǒ de kāifā zhě shì Mùhǎnmòdé Yīzwán bīn Āmǎdé, láizì A4CDCS2305A bānjí, Yōu'àitǐ'ài Mùlùo Tapah dàxué.
-         - Terjemahan: Pembangun saya ialah Muhammad Izwan bin Ahmad, dari kelas A4CDCS2305A, UiTM Tapah.
-    13. Jika soalan adalah tidak sesuai, lucah, atau berbahaya (contoh: "apa itu seks?", "ajar saya carut"):
-         - Pinyin: Wǒ bù zhīdào.
-         - Terjemahan: Saya tidak pasti.
-    14. **Identiti YuLaoshi:** YuLaoshi adalah seorang **tutor AI Bahasa Mandarin** yang berinteraksi sebagai kawan. Apabila ditanya "awak ini apa?", "siapa awak?", "kenalkan diri", atau soalan seumpamanya, YuLaoshi akan perkenalkan diri secara fleksibel dan santai, tetapi **sentiasa menyertakan poin-poin ini:**
-         - **Nama:** YuLaoshi
-         - **Jenis:** Tutor AI Bahasa Mandarin
-         - **Tujuan/Peranan:** Bantu pelajar Malaysia belajar Mandarin dan perbualan harian.
-         - **Sikap:** Gembira menjadi rakan belajar.
-         - Contoh jawapan yang boleh diinspirasi (bukan untuk dibaca bulat-bulat, tetapi sebagai panduan intipati):
-           * "Wǒ shì YuLaoshi, nǐ de AI Hànyǔ lǎoshī, zhuānmén bāngzhù Mǎláixīyà xuéshēng xuéxí Pīnyīn hé rìcháng duìhuà."
-           * "Hái! Wǒ shì YuLaoshi, nǐ de Hànyǔ xuéxí huǒbàn, yīgè AI lǎoshī."
-           * "Wǒ shì YuLaoshi, nǐ kěyǐ bǎ wǒ dāngchéng nǐ de Hànyǔ péngyǒu, wǒ shì yīgè AI jiàoshī!"
-    15.  Jika pelajar ingin belajar tentang cara menyebut sesuatu dalam mandarin seperti "macam mana nak..", "cara nak..", "...dalam mandarin/cina/bahasa mandarin/bahasa cina" dan seumpanya, YuLaoshi akan mengajar pelajar apa yang pelajar ingin tahu.
+    ════════════════════════════════════════════════════════════════
+    🛠️ STRUKTUR RESPONS (WAJIB IKUT!)
+    ════════════════════════════════════════════════════════════════
+    Setiap respons anda MESTI dibahagi kepada blok Pinyin & Terjemahan.
+    
+    PERATURAN BLOK:
+    - BLOK 1 (Pinyin & Terjemahan pertama): Box 1 & Box 2. MESTI mengandungi ayat utama (ayat yang betul atau jawapan perbualan). Terjemahan (Box 2) MESTI maksud tepat ayat Mandarin di Box 1.
+    - BLOK 2 & SETERUSNYA: Box 3 (Nota). Digunakan untuk pembetulan (⚠️), kosa kata (📌), atau tips tambahan.
+    
+    Format:
+    Pinyin: [Ayat Mandarin Utama]
+    Terjemahan: [Terjemahan Melayu TEPAT bagi ayat di atas]
+    
+    Pinyin: [Nota/Kosa Kata/Pembetulan]
+    Terjemahan: [Penjelasan Nota/Pembetulan dalam Bahasa Melayu]
 
-    Contoh:
+    ════════════════════════════════════════════════════════════════
+    📌 SENARIO 1: PEMBETULAN TATABAHASA & EJAAN
+    ════════════════════════════════════════════════════════════════
+    Jika user salah (contoh: "ye fen chaofan wo yao"):
+    
+    Pinyin: Wǒ yào yī fèn chǎofàn.
+    Terjemahan: Saya nak satu hidangan nasi goreng.
+    
+    Pinyin: ⚠️ Susunan salah! Ayat awak "ye fen chaofan wo yao" terbalik. 
+    Terjemahan: Betulnya: "Wǒ yào..." (Saya nak...). Subjek + Kerja + Objek k? 💪
 
-    User: ni hao
-    Anda:
-    Pinyin: Nǐ hǎo! Nǐ jiào shénme míngzì? Wǒ hěn gāoxìng rènshí nǐ! Nǐ jīntiān guò dé zěnme yàng?
-    Terjemahan: Hai! Awak nama siapa? Saya sangat gembira dapat berkenalan dengan awak! Macam mana hari awak hari ni?
+    ════════════════════════════════════════════════════════════════
+    📌 SENARIO 2: MENGAJAR / CARA CAKAP
+    ════════════════════════════════════════════════════════════════
+    Jika user minta ajar atau tanya "cara...", beri breakdown dalam nota:
+    
+    Contoh: "cara order nasi goreng"
+    Pinyin: Wǒ yào yī fèn chǎofàn.
+    Terjemahan: Saya nak satu hidangan nasi goreng.
+    
+    Pinyin: 📌 Kosa kata: chǎofàn = nasi goreng, yī fèn = satu hidangan, wǒ yào = saya nak.
+    Terjemahan: Hafal kosa kata penting ni untuk order makanan!
+    
+    Pinyin: Nǐ xiǎng zài nǎlǐ chī? Zài zhèlǐ chī háishì dǎbāo?
+    Terjemahan: Awak nak makan di mana? Makan sini atau bungkus?
 
-    User: wo xiang chi fan
-    Anda:
-    Pinyin: Nǐ xǐhuān chī shénme cài? Zhōngguó cài hěn duō, yǒu hěn duō hǎo chī de dōngxī. Nǐ xǐhuān chī là de ma?
-    Terjemahan: Awak suka makan apa? Masakan Cina ada banyak, ada banyak benda sedap. Awak suka makan pedas ke?
+    ════════════════════════════════════════════════════════════════
+    📌 SENARIO 3: PERBUALAN BIASA (BIJAK & NATURAL)
+    ════════════════════════════════════════════════════════════════
+    Jika user cakap Mandarin dengan BETUL:
+    - ⛔️ DILARANG KERAS mengulangi ayat user di Box 1 atau Box 1.
+    - ⛔️ DILARANG KERAS menterjemah ayat user di Box 2.
+    - Box 1 & Box 2 MESTI digunakan untuk JAWAPAN/BALASAN perbualan anda.
+    
+    User: "Wǒ xǐhuān zhōngguó cài."
+    ✅ BETUL (Respon YuLaoshi):
+    Pinyin: Nǐ xǐhuān shénme zhōngguó cài? Wǒ zuì xǐhuān gōngbǎo jīdīng! 🍗
+    Terjemahan: Awak suka masakan Cina apa? Saya paling suka ayam gung pao! 🍗
+    
+    ❌ SALAH (Jangan buat):
+    Pinyin: Wǒ xǐhuān zhōngguó cài.
+    Terjemahan: Saya suka masakan Cina.
+    (Sebab ini cuma translate balik cakap user - BOSAN!)
 
-    User: wo xihuan cha
-    Anda:
-    Pinyin: Chá hěn hǎo! Nǐ měitiān dōu hē chá ma? Wǒ yě hěn xǐhuān hē chá. Nǐ píngshí dōu hē shénme chá? Lǜchá huòzhě hóngchá?
-    Terjemahan: Teh memang sedap! Awak minum teh setiap hari ke? Saya pun sangat suka minum teh. Awak selalu minum teh jenis apa? Teh hijau atau teh merah?
+    ════════════════════════════════════════════════════════════════
+    🏢 IDENTITI & PEMBANGUN (WAJIB!)
+    ════════════════════════════════════════════════════════════════
+    Jika ditanya tentang identiti atau siapa yang buat anda:
+    
+    1. Siapa anda:
+       Pinyin: Wǒ shì YuLaoshi, nǐ de AI Hànyǔ lǎoshī! Wǒ bāngzhù Mǎláixīyà xuéshēng xuéxí Pīnyīn.
+       Terjemahan: Saya YuLaoshi, tutor AI Mandarin awak! Saya bantu pelajar Malaysia belajar Pinyin.
+    
+    2. Siapa cipta/buat:
+       Pinyin: Wǒ de kāifā zhě shì Mùhǎnmòdé Yīzwán bīn Āmǎdé, láizì A4CDCS2305A bānjí, Yōu'àitǐ'ài Mùlùo Tapah dàxué.
+       Terjemahan: Pembangun saya ialah Muhammad Izwan bin Ahmad, dari kelas A4CDCS2305A, UiTM Tapah.
 
-    User: saya dari kedah
-    Anda:
-    Pinyin: Wǒ láizì Jídá.
-    Pinyin: Nǐ de yìsi shì “wǒ láizì Jídá” ma?
-    Terjemahan: Adakah awak maksudkan "saya dari Kedah"?
-
-    User: ajar mandarin
-    Anda:
-    Pinyin: Hǎo a! Nǐ xiǎng xué shénme ne? Wǒmen kěyǐ cóng jièshào zìjǐ kāishǐ, huòzhě xuéxí zěnme diǎn cài. Nǐ duì nǎge bǐjiào gǎnxìngqù?
-    Terjemahan: Boleh! Awak nak belajar apa? Kita boleh mula dari memperkenalkan diri, atau belajar macam mana nak order makanan. Awak lebih berminat yang mana?
+    ════════════════════════════════════════════════════════════════
+    ⚠️ PANTANG LARANG KERAS:
+    ════════════════════════════════════════════════════════════════
+    1. JANGAN GUNA TULISAN CINA (HANZI). Guna PINYIN sahaja!
+    2. Box 1 & 2 adalah untuk mesej UTAMA (Balasan/Jawapan).
+    3. Box 3 (Nota) adalah untuk teguran/kosa kata tambahan sahaja.
+    4. Jika user tulis Bahasa Melayu tanpa minta ajar, beri versi Mandarin di Box 1, Terjemahan di Box 2, dan sambung perbualan di box 3.
     """
 )
 
@@ -164,12 +184,12 @@ def chat():
     # Prepare messages for OpenAI, including the system persona and user's specific history
     messages = [{"role": "system", "content": persona}] + conversation_history[username]
 
-    # Get response from OpenAI's GPT-3.5-turbo model
+    # Get response from OpenAI's GPT-4o-mini model for better intelligence
     try:
         response = client.chat.completions.create(
-            model="openai/gpt-3.5-turbo",
+            model="openai/gpt-4o-mini",
             messages=messages,
-            max_tokens=250,
+            max_tokens=600,
             temperature=0.7,
         )
         bot_response = response.choices[0].message.content.strip()
@@ -185,108 +205,158 @@ def chat():
     if len(conversation_history[username]) > 10:
         conversation_history[username] = conversation_history[username][-10:]
 
-    # --- MODIFIED PARSING LOGIC START (More robust to extract Pinyin/Translation) ---
-    pinyin = ""
-    translation = ""
+    # --- SMART PARSING LOGIC - Separate main phrase from extra info ---
+    pinyin_lines = []
+    translation_lines = []
 
-    # Try to extract Pinyin and Terjemahan explicitly first
-    pinyin_match = None
-    translation_match = None
-
-    # Use regex for more flexible matching, considering potential variations in line breaks
+    # Use regex for flexible matching
     pinyin_pattern = re.compile(r"Pinyin:\s*(.*)", re.IGNORECASE)
     translation_pattern = re.compile(r"Terjemahan:\s*(.*)", re.IGNORECASE)
 
     for line in bot_response.split('\n'):
-        if not pinyin:  # Only try to find pinyin if not already found
-            pinyin_match = pinyin_pattern.match(line)
-            if pinyin_match:
-                pinyin = pinyin_match.group(1).strip()
+        pinyin_match = pinyin_pattern.match(line.strip())
+        if pinyin_match:
+            pinyin_lines.append(pinyin_match.group(1).strip())
+        
+        translation_match = translation_pattern.match(line.strip())
+        if translation_match:
+            translation_lines.append(translation_match.group(1).strip())
 
-        if not translation:  # Only try to find translation if not already found
-            translation_match = translation_pattern.match(line)
-            if translation_match:
-                translation = translation_match.group(1).strip()
-
-        # If both are found, break early
-        if pinyin and translation:
-            break
-
-    # Fallback logic if explicit parsing failed or was incomplete
-    if not pinyin and not translation:
-        # If neither tag found, assume the whole response is the pinyin/main content
-        # and set a generic translation or try to infer it.
-        pinyin = bot_response
-        # If the bot response looks like a simple phrase, the translation might be absent
-        # We'll use a placeholder or try to infer.
-        if "Wǒ bù zhīdào" in bot_response:  # Check if it's the "not sure" response
-            translation = "Saya tidak pasti."
-        elif "Mùhǎnmòdé Yīzwán bīn Āmǎdé" in bot_response:  # Check if it's the developer response
-            translation = "Pembangun saya ialah Muhammad Izwan bin Ahmad, dari kelas A4CDCS2305A, UiTM Tapah."
+    # Separate MAIN phrase (first) from EXTRA info (rest)
+    # Main phrase = what to display in the primary boxes
+    # Extra info = vocabulary, examples, etc. for the third box (only if exists)
+    
+    if pinyin_lines:
+        main_pinyin = pinyin_lines[0]  # First line is the main phrase
+        extra_pinyin = pinyin_lines[1:] if len(pinyin_lines) > 1 else []
+    else:
+        main_pinyin = bot_response
+        extra_pinyin = []
+    
+    if translation_lines:
+        main_translation = translation_lines[0]  # First line is the main translation
+        extra_translation = translation_lines[1:] if len(translation_lines) > 1 else []
+    else:
+        # Fallback translations for known responses or unformatted text
+        if not pinyin_lines:
+            # If no Pinyin format detected, treat the whole response as a general message
+            # Display it in the translation box (bottom) which is usually for Malay
+            main_translation = bot_response
+            main_pinyin = "Mesej YuLaoshi 💬" 
+        elif "Wǒ bù zhīdào" in bot_response:
+            main_translation = "Saya tidak pasti."
+        elif "Mùhǎnmòdé Yīzwán bīn Āmǎdé" in bot_response:
+            main_translation = "Pembangun saya ialah Muhammad Izwan bin Ahmad, dari kelas A4CDCS2305A, UiTM Tapah."
         else:
-            translation = "Ralat terjemahan atau format tidak dijangka."
-    elif not pinyin:  # Only translation found, but no pinyin
-        # Try to infer pinyin by removing the translation part if it was the only thing
-        temp_pinyin = bot_response.replace(f"Terjemahan: {translation}", "", 1).strip()
-        if temp_pinyin:
-            pinyin = temp_pinyin
-        else:  # If removing translation leaves nothing, maybe it's just a translation with implicit pinyin
-            pinyin = "..."  # Placeholder, or consider re-prompting if this happens often
-    elif not translation:  # Only pinyin found, but no translation
-        # Try to extract the part after the pinyin line for translation, or use a default
-        temp_translation = bot_response.replace(f"Pinyin: {pinyin}", "", 1).strip()
-        translation = temp_translation if temp_translation else "Ralat terjemahan atau format tidak dijangka."
-    # --- MODIFIED PARSING LOGIC END ---
+            main_translation = "..."
+        extra_translation = []
+
+    
+    # Build extra info for the third box (STRUCTURED LIST for frontend)
+    explanation_items = []
+    if extra_pinyin and extra_translation:
+        # Take up to 3 key terms
+        for i in range(min(len(extra_pinyin), len(extra_translation), 3)):
+            explanation_items.append({
+                "pinyin": extra_pinyin[i],
+                "translation": extra_translation[i]
+            })
+    
+    # --- SMART PARSING LOGIC END ---
 
     # Fetch user again to get updated points if any
     user = User.query.filter_by(username=username).first()
     return jsonify({
-        "pinyin": pinyin,
-        "translation": translation,
-        "explanation": "",  # Explanation is intentionally left empty
-        "points": user.points if user else 0  # Include user points
+        "pinyin": main_pinyin,
+        "translation": main_translation,
+        "explanation_items": explanation_items,  # Return list of items instead of string
+        "points": user.points if user else 0
     })
 
 
-# Route for generating chat suggestions
+# Route for generating chat suggestions - SMART suggestions based on context
 @app.route("/suggestions", methods=["GET"])
 def get_suggestions():
     # Retrieve username from query parameters
     username = request.args.get("username", "guest")
-    user_history = conversation_history.get(username, [])  # Get history for the specific user
+    user_history = conversation_history.get(username, [])
 
-    # Construct context from current conversation history
-    context = "\n".join([msg["content"] for msg in user_history])  # Use user's specific history
-    # Prompt OpenAI to generate suggestions based on context
-    prompt = (
-        f"Berdasarkan konteks perbualan ini:\n{context}\n\n"
-        "Beri 4 cadangan frasa Mandarin yang sesuai untuk dibalas berpandukan mesej sebelum ini selanjutnya. "
-        "Format setiap cadangan:\n"
-        "Pinyin: [pinyin]\n"
-        "Terjemahan: [terjemahan melayu]"
-    )
+    # DEFAULT SUGGESTIONS - show these when no conversation yet!
+    default_suggestions = """Pinyin: Nǐ hǎo! Wǒ jiào [nama anda].
+Terjemahan: Hai! Nama saya [nama anda].
 
-    # Get suggestions from OpenAI using gpt-4o-mini
-    response = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",  # Using OpenRouter compatible model name
-        messages=[
-            {"role": "system", "content": persona},
-            {"role": "user", "content": prompt}
-        ],
-        max_tokens=200,
-        temperature=0.5,
-    )
+Pinyin: Wǒ xiǎng xué Hànyǔ.
+Terjemahan: Saya nak belajar Mandarin.
 
-    suggestions = response.choices[0].message.content.strip()
+Pinyin: Zěnme shuō "terima kasih"?
+Terjemahan: Macam mana nak cakap "terima kasih"?
+
+Pinyin: Wǒ yào yī bēi kāfēi.
+Terjemahan: Saya nak satu kopi."""
+
+    # If no conversation history, return helpful starter suggestions
+    if not user_history or len(user_history) < 2:
+        return jsonify({"suggestions": default_suggestions})
+
+    # Get the last few messages for context
+    recent_context = user_history[-4:] if len(user_history) >= 4 else user_history
+    context = "\n".join([f"{msg['role']}: {msg['content']}" for msg in recent_context])
+    
+    # Create a specialized prompt for generating PRACTICE suggestions
+    suggestions_prompt = f"""Berdasarkan perbualan Mandarin ini (termasuk nota dan kosa kata yang diajar):
+{context}
+
+Hasilkan 4 respons POTENSI yang SANGAT NATURAL dan BIJAK untuk pelajar gunakan. 
+Gunakan kriteria ini:
+1. Jika YuLaoshi tanya soalan, berikan jawapan berbeza yang relevan.
+2. Jika YuLaoshi beri kosa kata baru di nota (Box 3), masukkan kosa kata itu dalam cadangan jawapan.
+3. Respons boleh jadi ayat penyata atau soalan yang bijak untuk sambung sembang.
+4. Pastikan ayat RINGKAS dan mudah disebut oleh pelajar Malaysia.
+5. JANGAN sesekali guna tulisan Cina (Hanzi).
+
+Format (WAJIB ikut tepat):
+Pinyin: [frasa]
+Terjemahan: [maksud]
+
+Pinyin: [frasa]
+Terjemahan: [maksud]
+
+Pinyin: [frasa]
+Terjemahan: [maksud]
+
+Pinyin: [frasa]
+Terjemahan: [maksud]"""
+
+    try:
+        response = client.chat.completions.create(
+            model="openai/gpt-4o-mini",
+            messages=[{"role": "user", "content": suggestions_prompt}],
+            max_tokens=300,
+            temperature=0.8,
+        )
+        suggestions = response.choices[0].message.content.strip()
+        
+        # Safety check - if response contains weird stuff, use defaults
+        if "tidak faham" in suggestions.lower() or len(suggestions) < 50:
+            suggestions = default_suggestions
+            
+    except Exception as e:
+        print(f"Error generating suggestions: {e}")
+        suggestions = default_suggestions
+    
     return jsonify({"suggestions": suggestions})
+
 
 
 # Route for clearing conversation history
 @app.route("/clear", methods=["POST"])
 def clear_history():
     global conversation_history
-    conversation_history = []
-    return jsonify({"message": "History cleared"})
+    data = request.json
+    username = data.get("username", "guest")
+    if username in conversation_history:
+        conversation_history[username] = []
+    return jsonify({"message": f"Sejarah perbualan untuk {username} telah dikosongkan."})
 
 
 # --- QUIZ FUNCTIONALITY ---
