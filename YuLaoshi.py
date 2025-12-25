@@ -9,8 +9,7 @@ import json
 import io  # Import io for in-memory byte streams
 import urllib.parse  # Import urllib.parse for URL encoding/decoding
 import re  # Import regex for more robust parsing
-import asyncio
-import edge_tts
+from gtts import gTTS
 
 # Load environment variables from app.env file
 dotenv_path = Path('./app.env')
@@ -345,7 +344,8 @@ def generate_quiz():
 @app.route("/quiz_audio/<path:audio_data>", methods=['GET'])
 def serve_quiz_audio(audio_data):
     """
-    Generates and streams high-quality neural audio using Microsoft Edge TTS.
+    Generates and streams audio using Google TTS (gTTS).
+    This is highly compatible with server proxies like PythonAnywhere.
     """
     try:
         # Decode the JSON string from the URL path
@@ -356,32 +356,19 @@ def serve_quiz_audio(audio_data):
         if not text_to_speak:
             return jsonify({"error": "No text provided for audio generation"}), 400
 
-        # Create the communicate object with a neural voice
-        # zh-CN-XiaoxiaoNeural is widely considered the best free Chinese neural voice
-        communicate = edge_tts.Communicate(text_to_speak, "zh-CN-XiaoxiaoNeural")
+        # Generate audio using Google TTS
+        tts = gTTS(text=text_to_speak, lang='zh-cn')
+        
+        # Save to a byte stream
+        audio_stream = io.BytesIO()
+        tts.write_to_fp(audio_stream)
+        audio_stream.seek(0)
 
-        # Synchronously run the async streaming
-        audio_data_bytes = b""
-        async def fetch_audio():
-            nonlocal audio_data_bytes
-            async for chunk in communicate.stream():
-                if chunk["type"] == "audio":
-                    audio_data_bytes += chunk["data"]
-
-        # Handle the event loop properly for Flask
-        try:
-            loop = asyncio.get_event_loop()
-        except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            
-        loop.run_until_complete(fetch_audio())
-
-        return Response(audio_data_bytes, mimetype='audio/mpeg')
+        return Response(audio_stream.read(), mimetype='audio/mpeg')
 
     except Exception as e:
-        print(f"Error serving high-quality audio: {e}")
-        return jsonify({"error": "Failed to generate audio"}), 500
+        print(f"Error serving audio via gTTS: {e}")
+        return jsonify({"error": f"Failed to generate audio: {str(e)}"}), 500
 
 
 def generate_quiz_questions_data():

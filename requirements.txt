@@ -6,4 +6,4 @@ openai~=1.82.0
 dotenv~=0.9.9
 python-dotenv~=1.1.0
 flask_sqlalchemy~=3.1.1
-edge-tts~=7.2.7
+gTTS~=2.5.4
