@@ -9,6 +9,8 @@ import json
 import io  # Import io for in-memory byte streams
 import urllib.parse  # Import urllib.parse for URL encoding/decoding
 import re  # Import regex for more robust parsing
+import asyncio
+import edge_tts
 
 # Load environment variables from app.env file
 dotenv_path = Path('./app.env')
@@ -103,8 +105,11 @@ class User(db.Model):
 with app.app_context():
     db.create_all()
 
-# Initialize OpenAI client with API key from environment variables
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Initialize OpenAI client with OpenRouter configuration
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=os.getenv("OPENAI_API_KEY")
+)
 
 # Global variable to store conversation history for the chat bot
 conversation_history = {}  # Changed to dictionary to store history per user
@@ -163,7 +168,7 @@ def chat():
     # Get response from OpenAI's GPT-3.5-turbo model
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="openai/gpt-3.5-turbo",
             messages=messages,
             max_tokens=250,
             temperature=0.7,
@@ -264,7 +269,7 @@ def get_suggestions():
 
     # Get suggestions from OpenAI using gpt-4o-mini
     response = client.chat.completions.create(
-        model="gpt-4o-mini",  # Using a valid and efficient model
+        model="openai/gpt-3.5-turbo",  # Using OpenRouter compatible model name
         messages=[
             {"role": "system", "content": persona},
             {"role": "user", "content": prompt}
@@ -337,13 +342,10 @@ def generate_quiz():
     return jsonify({"questions": questions})
 
 
-# New route to serve audio dynamically (no file saving)
 @app.route("/quiz_audio/<path:audio_data>", methods=['GET'])
 def serve_quiz_audio(audio_data):
     """
-    Generates and streams audio for a given Mandarin text on demand.
-    The audio_data must be URL-encoded when sent from the frontend.
-    It expects a JSON string containing 'text_to_speak' and 'is_option'.
+    Generates and streams high-quality neural audio using Microsoft Edge TTS.
     """
     try:
         # Decode the JSON string from the URL path
@@ -354,28 +356,31 @@ def serve_quiz_audio(audio_data):
         if not text_to_speak:
             return jsonify({"error": "No text provided for audio generation"}), 400
 
-        # Generate audio using OpenAI TTS model
-        # The TTS model will pronounce the characters directly.
-        tts_response = client.audio.speech.create(
-            model="tts-1", voice="onyx", input=text_to_speak
-        )
+        # Create the communicate object with a neural voice
+        # zh-CN-XiaoxiaoNeural is widely considered the best free Chinese neural voice
+        communicate = edge_tts.Communicate(text_to_speak, "zh-CN-XiaoxiaoNeural")
 
-        # Create an in-memory byte stream to store audio data
-        audio_stream = io.BytesIO()
-        # Stream chunks of audio data into the in-memory stream
-        for chunk in tts_response.iter_bytes(chunk_size=4096):
-            audio_stream.write(chunk)
-        audio_stream.seek(0)  # Rewind the stream to the beginning for reading
+        # Synchronously run the async streaming
+        audio_data_bytes = b""
+        async def fetch_audio():
+            nonlocal audio_data_bytes
+            async for chunk in communicate.stream():
+                if chunk["type"] == "audio":
+                    audio_data_bytes += chunk["data"]
 
-        # Return the audio as a Flask Response object with the correct MIME type
-        return Response(audio_stream.read(), mimetype='audio/mpeg')
+        # Handle the event loop properly for Flask
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+        loop.run_until_complete(fetch_audio())
 
-    except json.JSONDecodeError:
-        print(f"Error decoding JSON for audio: {audio_data}")
-        return jsonify({"error": "Invalid audio data format"}), 400
+        return Response(audio_data_bytes, mimetype='audio/mpeg')
+
     except Exception as e:
-        # Log any errors that occur during audio generation or streaming
-        print(f"Error serving audio for '{audio_data}': {e}")
+        print(f"Error serving high-quality audio: {e}")
         return jsonify({"error": "Failed to generate audio"}), 500
 
 
@@ -430,7 +435,7 @@ def generate_quiz_questions_data():
         try:
             # Step 1: Generate question text from GPT
             response = client.chat.completions.create(
-                model="gpt-4o",  # Using GPT-4o for potentially better quality and adherence to format
+                model="openai/gpt-4o",  # Using OpenRouter compatible model name
                 messages=[
                     {"role": "system", "content": system_quiz_generation_prompt},
                     {"role": "user", "content": p_content}
@@ -559,6 +564,8 @@ def generate_quiz_questions_data():
                 "type": question_data_type,
                 "question": question_for_display,
                 "audio_url": main_audio_url,
+                "chinese_text": audio_chinese, # For client-side TTS
+                "option_chinese_texts": [opt['text'] for opt in options_chinese], # For client-side TTS
                 "correctAnswer": correct_answer_index,
                 "options": options_for_display,  # Display Pinyin options to user
                 "option_audio_urls": option_audio_urls  # Store audio URLs for each option
