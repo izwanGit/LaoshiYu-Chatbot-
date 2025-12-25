@@ -3,6 +3,8 @@
 # 🏮 YuLaoshi (宇老师)
 ### *Your Infinite AI Mandarin Companion*
 
+<img src="static/icons/YuLaoshi_icon.png" width="120" height="120" alt="YuLaoshi Logo">
+
 [![Live Demo](https://img.shields.io/badge/LIVE_DEMO-Visit_Site-2ea44f?style=for-the-badge&logo=google-chrome&logoColor=white)](https://izwan.pythonanywhere.com/)
 [![GitHub stars](https://img.shields.io/github/stars/izwanGit/LaoshiYu-Chatbot-?style=for-the-badge&color=ffd700)](https://github.com/izwanGit/LaoshiYu-Chatbot-/stargazers)
 [![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
@@ -160,7 +162,17 @@ python YuLaoshi.py
 
 ---
 
-## 👨‍💻 DEVELOPED BY
+## 🙏 Special Dedication
+This project is dedicated to **Yu Laoshi**, my Mandarin teacher for **TMC501**. 
+
+In our classes, he always says: *"There's an AI for everything these days!"* 
+But it made me wonder—why isn't there a dedicated AI for Mandarin? An AI for our specifically for our listening tests? An AI to make learning Mandarin truly interactive? 
+
+That inspiration is why I created **YuLaoshi**. 🏮
+
+---
+
+## 👨‍💻 Developed By
 **Muhammad Izwan bin Ahmad**  
 *Universiti Teknologi MARA (UiTM), Kampus Tapah, Perak.*
 
