@@ -183,8 +183,8 @@
                         <div class="play-button-container text-center">
                             <button id="play-audio-btn" class="btn play-btn shadow"><i
                                     class="bi bi-play-fill"></i></button>
-                            <audio id="quiz-audio" src=""></audio>
-                            <audio id="option-audio" src=""></audio>
+                            <audio id="quiz-audio" src="" preload="auto"></audio>
+                            <audio id="option-audio" src="" preload="auto"></audio>
                         </div>
                         <div id="options-container" class="mt-4">
                         </div>
@@ -338,7 +338,7 @@
             }
 
             // Handle audio play button for the main question
-            playAudioBtn.addEventListener('click', () => {
+            playAudioBtn.addEventListener('click', async () => {
                 const currentQuestion = questions[currentQuestionIndex];
 
                 if (!quizAudioEl.paused) {
@@ -348,11 +348,21 @@
                     return;
                 }
 
-                // Try playing backend audio (High Quality Neural)
-                quizAudioEl.play().catch(e => {
-                    console.warn("Backend audio failed, falling back to browser TTS:", e);
+                // Show loading state on button
+                playAudioBtn.innerHTML = '<div class="spinner-border spinner-border-sm text-light" role="status"></div>';
+
+                try {
+                    // Force a reload if src is lost or to ensure fresh buffer
+                    if (!quizAudioEl.src || quizAudioEl.src.includes('undefined')) {
+                        quizAudioEl.src = currentQuestion.audio_url;
+                    }
+
+                    await quizAudioEl.play();
+                } catch (e) {
+                    console.warn("Backend neural audio failed or timed out, falling back to browser TTS:", e);
                     speakMandarin(currentQuestion.chinese_text);
-                });
+                    playAudioBtn.innerHTML = '<i class="bi bi-play-fill"></i>';
+                }
             });
 
             // Reset play button icon when main audio finishes
