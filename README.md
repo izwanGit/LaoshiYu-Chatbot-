@@ -24,13 +24,14 @@
 </div>
 
 ## 🌟 Overview
-**YuLaoshi** represents a leap forward in language education. It is not just a chatbot; it's a personalized tutor that understands the nuances of language learning. Built with **GPT-4o** via OpenRouter and powered by **Google's Neural TTS**, it bridges the gap between static textbooks and real-world conversation.
+**YuLaoshi** represents a leap forward in language education. It is not just a chatbot; it's a personalized tutor that understands the nuances of language learning. Built with **GPT-4o-mini** via OpenRouter and powered by **Google's Neural TTS**, it bridges the gap between static textbooks and real-world conversation.
 
 ### 🚀 Core Pillars
-*   **Contextual Intelligence:** Responds with Pinyin and Malay translations for every sentence.
+*   **Smart Grammar Correction:** Real-time analysis of sentence structure and Pinyin spelling with instant feedback.
+*   **Contextual Intelligence:** Responds with structured Pinyin and Malay translations for every sentence.
 *   **Crystal Clear Audio:** High-fidelity Mandarin pronunciation using neural speech engines.
 *   **Gamified Growth:** A comprehensive point and badge system that rewards consistency.
-*   **Smart Suggestions:** Stuck? The AI suggests what you should say next based on the chat history.
+*   **Smart Suggestions:** The AI suggests natural, context-aware responses based on the tuition notes.
 
 ---
 
@@ -41,9 +42,10 @@ The chatbot is fine-tuned to act as a **supportive Mandarin Sensei**. It doesn't
 
 | Capability | Technical Implementation | User Benefit |
 | :--- | :--- | :--- |
-| **Triple Response** | OpenRouter LLM parsing | Get Hanzi, Pinyin, and Malay in one go. |
+| **Structured Response** | OpenRouter LLM parsing | Get Pinyin and Malay in separate, easy-to-read boxes. |
+| **Grammar Guard** | AI Pattern Recognition | Never learn wrong! The AI catches and corrects your mistakes instantly. |
 | **Contextual Memory** | Session-based history management | The AI remembers what you talked about earlier. |
-| **Auto-Suggestions** | Real-time context analysis | Never run out of things to say. |
+| **Smart Suggestions** | GPT-4o-mini Context Analysis | Learn how to reply naturally without getting stuck. |
 
 ### 🎯 2. The Listening Lab (Quiz)
 A dynamic testing environment that uses AI to generate unique challenges.
@@ -62,7 +64,7 @@ A dynamic testing environment that uses AI to generate unique challenges.
 | :--- | :--- | :--- |
 | **Language** | Python 3.10+ | Core application logic. |
 | **Web Framework** | Flask 3.1 | Routing, API handling, and server management. |
-| **Brain (LLM)** | GPT-4o (via OpenRouter) | Natural language understanding and generation. |
+| **Brain (LLM)** | GPT-4o-mini (via OpenRouter) | Natural language understanding and generation. |
 | **Vocal Engine** | gTTS | Converting Mandarin text into human-like audio. |
 | **Database** | SQLite + SQLAlchemy | Storing user progress, points, and history. |
 | **UI/UX** | Bootstrap 5 + Custom CSS | Responsive and aesthetic frontend design. |
